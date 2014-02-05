@@ -1,4 +1,4 @@
-var dataset = [18, 29, 34, 22, 92]
+var dataset = [18, 29, 34, 22, 12]
 
 svg = d3.select("body").append("svg").attr({
     width: 600, 
@@ -12,9 +12,9 @@ svg.selectAll("rect")
     .append("rect")
     .attr({
         x:function(d, i){ return 101*i},
-        y: 0,
+        y: function(d){ return 400-d*5},
         width:100,
-        height: function(d) { return d}, 
+        height: function(d) { return d*5}, 
         fill: "red"
     })
     
