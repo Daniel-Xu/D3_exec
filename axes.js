@@ -56,45 +56,56 @@ svg.append("g")
     })
     .call(yAxis)
 
+var circleAttr = {
+    cx: function(d){ return xScale(d.x)},
+    cy: function(d){ return yScale(d.y)}, 
+    r: radius
+}
+
 svg.selectAll("circle")
     .data(data)
     .enter()
     .append("circle")
-    .attr({
-        cx: function(d){ return xScale(d.x)},
-        cy: function(d){ return yScale(d.y)}, 
+    .attr(circleAttr)
+    .on("mouseover", mouseoverHandler)
+    .on("mouseout", mouseoutHandler)
+
+    svg.on("click", function(d, i){
+        var cor = d3.mouse(this)
+
+        var newData = { x: Math.round(xScale.invert(cor[0])), y: Math.round(yScale.invert(cor[1])) }
+       
+        data.push(newData)
+        
+        //update pattern
+        svg.selectAll("circle").data(data).enter()
+            .append("circle")
+            .attr(circleAttr)
+            .on("mouseover", mouseoverHandler)
+            .on("mouseout", mouseoutHandler)
+    })
+
+function mouseoverHandler(d, i){
+    //this is raw DOM element, we should chagne it to d3 element
+    d3.select(this).attr({
+        fill: "lightgreen",
+        r: radius * 2, 
+    })
+
+    svg.append("text").attr({
+        class: "value",
+        x: function(){ return xScale(d.x)-30}, 
+        y: function(){ return yScale(d.y)-15}
+    }).text(function(){
+        return [d.x, d.y]
+    })
+}
+
+function mouseoutHandler(d, i){
+    d3.select(this).attr({
+        fill: 'black', 
         r: radius
     })
-    .on("mouseover", function(d, i){
-        //this is raw DOM element, we should chagne it to d3 element
-        d3.select(this).attr({
-            fill: "lightgreen",
-            r: radius * 2, 
-        })
 
-        svg.append("text").attr({
-            class: "value",
-            x: function(){ return xScale(d.x)-30}, 
-            y: function(){ return yScale(d.y)-15}
-        }).text(function(){
-            return [d.x, d.y]
-        })
-
-    })
-    .on("mouseout", function(d, i){
-        d3.select(this).attr({
-            fill: 'black', 
-            r: radius
-        })
-
-        d3.select(".value").remove()
-    })
-
-
-
-
-
-
-
-
-
+    d3.select(".value").remove()
+}
