@@ -56,19 +56,33 @@ svg.append("g")
     })
     .call(yAxis)
 
+var circleInitialAttr = {
+    cx: xScale(0),
+    cy: yScale(0), 
+    r: 1
+}
 var circleAttr = {
     cx: function(d){ return xScale(d.x)},
     cy: function(d){ return yScale(d.y)}, 
     r: radius
 }
 
-svg.selectAll("circle")
+var circles = svg.selectAll("circle")
     .data(data)
     .enter()
     .append("circle")
-    .attr(circleAttr)
+    .attr(circleInitialAttr)
     .on("mouseover", mouseoverHandler)
     .on("mouseout", mouseoutHandler)
+
+circles.transition()
+    .delay(function(d,i){ return i*1000+1000 })
+    .duration(1000)
+    .ease("bounce")
+    .attr(circleAttr)
+
+
+
 
     svg.on("click", function(d, i){
         var cor = d3.mouse(this)
@@ -78,11 +92,16 @@ svg.selectAll("circle")
         data.push(newData)
         
         //update pattern
-        svg.selectAll("circle").data(data).enter()
+        var c = svg.selectAll("circle").data(data).enter()
             .append("circle")
-            .attr(circleAttr)
+            .attr(circleInitialAttr)
             .on("mouseover", mouseoverHandler)
             .on("mouseout", mouseoutHandler)
+
+        c.transition()
+            .duration(1000)
+            .ease("bounce")
+            .attr(circleAttr)
     })
 
 function mouseoverHandler(d, i){
