@@ -37,6 +37,24 @@ var yScale = d3.scale.linear()
                 .domain([0, d3.max(data, function(d){ return d.y})])
                 .range([range.top, h-range.bottom])
 
+var xAxis = d3.svg.axis().scale(xScale).orient("top")
+
+var yAxis = d3.svg.axis().scale(yScale).orient("left")
+
+
+svg.append("g")
+    .attr({
+        class: "axis",
+        transform: "translate("+ [0, range.top] +")"
+    })
+    .call(xAxis)
+
+svg.append("g")    
+    .attr({
+        class: "axis",
+        transform: "translate("+ [range.left, 0] +")"
+    })
+    .call(yAxis)
 
 svg.selectAll("circle")
     .data(data)
@@ -47,6 +65,11 @@ svg.selectAll("circle")
         cy: function(d){ return yScale(d.y)}, 
         r: radius
     })
+
+
+
+
+
 
 
 
