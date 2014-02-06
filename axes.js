@@ -30,14 +30,14 @@ var data = [
 ]
 
 var xScale = d3.scale.linear()
-                .domain([0, d3.max(data, function(d){return d.x})])
+                .domain([0, d3.max(data, function(d){return d.x})+10])
                 .range([range.left, w-range.right])
 
 var yScale = d3.scale.linear()
-                .domain([0, d3.max(data, function(d){ return d.y})])
+                .domain([0, d3.max(data, function(d){ return d.y})+10])
                 .range([range.top, h-range.bottom])
 
-var xAxis = d3.svg.axis().scale(xScale).orient("top")
+var xAxis = d3.svg.axis().scale(xScale).orient("top")//.tickSize(20)
 
 var yAxis = d3.svg.axis().scale(yScale).orient("left")
 
