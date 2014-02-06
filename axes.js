@@ -65,6 +65,31 @@ svg.selectAll("circle")
         cy: function(d){ return yScale(d.y)}, 
         r: radius
     })
+    .on("mouseover", function(d, i){
+        //this is raw DOM element, we should chagne it to d3 element
+        d3.select(this).attr({
+            fill: "lightgreen",
+            r: radius * 2, 
+        })
+
+        svg.append("text").attr({
+            class: "value",
+            x: function(){ return xScale(d.x)-30}, 
+            y: function(){ return yScale(d.y)-15}
+        }).text(function(){
+            return [d.x, d.y]
+        })
+
+    })
+    .on("mouseout", function(d, i){
+        d3.select(this).attr({
+            fill: 'black', 
+            r: radius
+        })
+
+        d3.select(".value").remove()
+    })
+
 
 
 
