@@ -42,14 +42,14 @@ var xAxis = d3.svg.axis().scale(xScale).orient("top")//.tickSize(20)
 var yAxis = d3.svg.axis().scale(yScale).orient("left")
 
 
-svg.append("g")
+var xAxisGroup = svg.append("g")
     .attr({
         class: "axis",
         transform: "translate("+ [0, range.top] +")"
     })
     .call(xAxis)
 
-svg.append("g")    
+var yAxisGroup = svg.append("g")    
     .attr({
         class: "axis",
         transform: "translate("+ [range.left, 0] +")"
@@ -76,7 +76,7 @@ var circles = svg.selectAll("circle")
     .on("mouseout", mouseoutHandler)
 
 circles.transition()
-    .delay(function(d,i){ return i*1000+1000 })
+    .delay(function(d,i){ return i*100+1000 })
     .duration(1000)
     .ease("bounce")
     .attr(circleAttr)
@@ -91,6 +91,10 @@ circles.transition()
        
         data.push(newData)
         
+        //update the scale, and axis are based on scale
+        xScale.domain([0, d3.max(data, function(d){ return d.x})+10])
+        yScale.domain([0, d3.max(data, function(d){ return d.y})+10])
+
         //update pattern
         var c = svg.selectAll("circle").data(data).enter()
             .append("circle")
@@ -102,6 +106,13 @@ circles.transition()
             .duration(1000)
             .ease("bounce")
             .attr(circleAttr)
+            
+
+        xAxisGroup.transition()
+            .call(xAxis)
+
+        yAxisGroup.transition()
+            .call(yAxis)
     })
 
 function mouseoverHandler(d, i){
