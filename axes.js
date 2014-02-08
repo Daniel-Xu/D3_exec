@@ -96,7 +96,14 @@ circles.transition()
         yScale.domain([0, d3.max(data, function(d){ return d.y})+10])
 
         //update pattern
-        var c = svg.selectAll("circle").data(data).enter()
+        var c = svg.selectAll("circle").data(data)
+
+        c.transition()
+            .duration(1000)
+            .ease("bounce")
+            .attr(circleAttr)
+
+        c.enter()
             .append("circle")
             .attr(circleInitialAttr)
             .on("mouseover", mouseoverHandler)
