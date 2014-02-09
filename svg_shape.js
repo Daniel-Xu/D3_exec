@@ -17,6 +17,45 @@ d3.csv("date.csv", function(d){ d.year = parse(d.year); return d}, function(data
 
     var yearAxis = d3.svg.axis().scale(yearScale).orient("bottom").tickSize(100 - window.innerHeight)
 
+
+    svg.append("line")
+        .attr({
+            x1: 50, 
+            y1: 50, 
+            x2: window.innerWidth-50,
+            y2: 50, 
+            fill: "none",
+            stroke: "#474747"
+        })
+
+    //line generator
+    var line = d3.svg.line()
+                .x(function(d){ return yearScale(d.year)})
+                .y(function(d){ return window.innerHeight-numberScale(d.number)})
+
+
+    var area = d3.svg.area()
+                .x(function(d){ return yearScale(d.year)})
+                .y0(window.innerHeight-50)
+                .y1(function(d){ return window.innerHeight-numberScale(d.number)})
+
+
+    svg.append("path")
+        .data([data])
+        .attr({
+            d: line,
+            fill: "none", 
+            "stroke-width": 4, 
+            stroke: "#78B446"
+        })
+    svg.append("path") 
+        .data([data])
+        .attr({
+            d: area,
+            fill: '#C3E4A8', 
+            stroke: "none"
+        })
+
     svg.append('g')
         .attr({
             class: "axis", 
